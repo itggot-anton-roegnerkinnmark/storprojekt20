@@ -3,6 +3,7 @@ require 'bcrypt'
 require 'sinatra'
 require 'sqlite3'
 require_relative './model.rb'
+require 'sinatra/reloader'
 
 
 
@@ -47,8 +48,9 @@ post('/login') do
 end
 
 get('/product/:product_id') do 
-    product = db.execute('SELECT * FROM Product WHERE id = ?', params[:product_id])
-    slim(:product)
+    product = db.execute('SELECT * FROM Product WHERE id = ?', params[:product_id].to_i)[0]
+    p product
+    slim(:product, locals:{product:product})
 end 
     
 
@@ -71,11 +73,32 @@ post('/upload_product') do
     redirect("/upload_product")
 end
 
+post('/update_product') do 
+    stock = params["stock"]
+    price = params["decide_price"]
+    reviews_text = params["reviews_text"]
+    product_name = params["product_name"]
+    id = params["id"]
+
+    update = db.execute('UPDATE Product SET stock=?, price=?, reviews_text=?, product_name=? WHERE id=?', stock, price, reviews_text, product_name, id)
+    redirect("/")
+end 
+
+post('/delete_product') do 
+    id = params["id"]
+
+    db.execute('DELETE FROM Product WHERE id=?', id)
+    p 'lmao'
+    redirect("/")
+end 
+
+
 get('/all_products') do
     product = db.execute('SELECT * FROM Product')
     p product
     slim(:show_products, locals:{products:product})
 end 
+
 
 get('/error') do 
     if session[:error_message] != nil

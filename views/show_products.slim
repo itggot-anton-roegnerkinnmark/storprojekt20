@@ -15,4 +15,18 @@ h1 Hej yoo
     br/
     h4 stock
     p = prod['stock']
+
+h2 delete product 
+form action="/delete_product" method="post"
+    input type="integer" name="id" placeholder="delete product id"
+    input type="submit" value="delete product"/
+
+h2 update product
+form action="/update_product" method="post"
+    input type="integer" name="stock" placeholder="update stock"
+    input type="integer" name="decide_price" placeholder="update price"
+    input type="text" name="reviews_text" placeholder="update review text"
+    input type="text" name="product_name" placeholder="update product name"
+    input type="integer" name="id" placeholder="update id"
+    input type="submit" value="update product"/
     
